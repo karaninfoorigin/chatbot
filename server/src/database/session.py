@@ -62,24 +62,3 @@ def check_db():
         db.close()
     except Exception as e:
         print("Database connection failed:", e)
-
-
-def get_user_by_email(db, email: str):
-    result = db.execute(
-        text("SELECT user_id, email, username, role_id FROM users WHERE email = :email"),
-        {"email": email}
-    )
-    user = result.mappings().first()
-    return user
-
-
-
-
-def get_user_by_username(db, username: str):
-    result = db.execute(
-        text("SELECT user_id FROM users WHERE username = :username"),
-        {"username": username}
-    )
-    user = result.mappings().first()
-    return user
-
