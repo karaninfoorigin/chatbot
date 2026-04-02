@@ -1,0 +1,98 @@
+/* Container */
+.signin-container {
+  width: 100%;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+/* Card */
+.signin-card {
+  width: 100%;
+  max-width: 380px;
+  background: var(--surface-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 28px 24px;
+  transition: all 0.3s ease;
+}
+
+/* Title */
+.signin-title {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+/* Form */
+.signin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Label */
+.signin-form label {
+  font-size: 14px;
+  color: var(--secondary-text);
+}
+
+/* Phone input */
+.phone-input {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--input-bg);
+}
+
+.phone-input span {
+  padding: 10px 12px;
+  background: var(--bg-color);
+  border-right: 1px solid var(--border-color);
+  font-size: 14px;
+}
+
+.phone-input input {
+  flex: 1;
+  padding: 10px 12px;
+  font-size: 14px;
+  background: transparent;
+}
+
+/* Button */
+.signin-btn {
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  background: var(--primary-color);
+  color: white;
+  font-weight: 500;
+}
+
+.signin-btn:hover {
+  background: var(--primary-hover);
+}
+
+.signin-btn:active {
+  transform: scale(0.98);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (min-width: 640px) {
+  .signin-card {
+    padding: 32px;
+  }
+
+  .signin-title {
+    font-size: 24px;
+  }
+
+  .phone-input input {
+    font-size: 15px;
+  }
+}
