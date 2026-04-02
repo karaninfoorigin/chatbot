@@ -1,0 +1,75 @@
+/* ===== RESET ===== */
+/* *,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+} */
+
+/* ===== DESIGN TOKENS ===== */
+:root {
+  /* Colors (Light Theme) */
+  --bg-color: #f0f2f5;
+  --surface-color: #ffffff;
+  --text-color: #111b21;
+  --secondary-text: #667781;
+
+  --primary-color: #25d366;        /* WhatsApp green */
+  --primary-hover: #20bd5a;
+
+  --border-color: #e9edef;
+  --input-bg: #ffffff;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+}
+
+/* ===== DARK THEME ===== */
+.dark {
+  --bg-color: #111b21;
+  --surface-color: #202c33;
+  --text-color: #e9edef;
+  --secondary-text: #8696a0;
+
+  --primary-color: #25d366;
+  --primary-hover: #20bd5a;
+
+  --border-color: #2a3942;
+  --input-bg: #2a3942;
+}
+
+/* ===== GLOBAL STYLES ===== */
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background 0.3s ease, color 0.3s ease;
+  margin:0
+}
+
+/* Smooth inputs & buttons */
+input,
+button {
+  font-family: inherit;
+  outline: none;
+  border: none;
+}
+
+/* Inputs */
+input {
+  background-color: var(--input-bg);
+  color: var(--text-color);
+}
+
+/* Buttons */
+button {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
