@@ -1,64 +1,48 @@
-# src/database/session.py
-from typing import Annotated
+from typing import Annotated, AsyncGenerator
 
-from sqlalchemy.orm import Session
 from fastapi import Depends
-from sqlalchemy import create_engine, text
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import (
+    create_async_engine,
+    async_sessionmaker,
+    AsyncSession,
+)
+
 from src.config.setting import settings
 
 
-
-
 DATABASE_URL = (
-    f"{settings.DB_PROTOCOL}://{settings.DB_USER}:{settings.DB_PASSWORD}"
+    f"postgresql+asyncpg://{settings.DB_USER}:{settings.DB_PASSWORD}"
     f"@{settings.DB_HOST}/{settings.DB_NAME}"
-    f"?{settings.DB_OPTIONS}" 
+    f"?{settings.DB_OPTIONS}"
 )
 
 
-engine = create_engine(
+engine = create_async_engine(
     DATABASE_URL,
-    echo=settings.DEBUG,  # logs SQL queries if DEBUG=True
-    future=True,  # enables SQLAlchemy 2.0 style
-    connect_args={"sslmode": "require"} if "sslmode=require" in settings.DB_OPTIONS else {}
+    echo=settings.DEBUG,
+    pool_pre_ping=True,   # important for Neon
 )
 
-SessionLocal = sessionmaker(
+
+AsyncSessionLocal = async_sessionmaker(
     bind=engine,
-    autoflush=False, # prevents automatic writes before queries
-    autocommit=False
+    expire_on_commit=False,
 )
 
-Base = declarative_base()
 
-
-def get_db():
-    """
-    FastAPI dependency that provides a database session
-    and closes it automatically after request.
-    """
-    db = SessionLocal()
-    try:
+async def get_db() -> AsyncGenerator[AsyncSession, None]:
+    async with AsyncSessionLocal() as db:
         yield db
-    finally:
-        db.close()
-
-# db session
-DBSession = Annotated[Session, Depends(get_db)]
 
 
+DBSession = Annotated[AsyncSession, Depends(get_db)]
 
 
-
-def check_db():
-    """
-    Simple function to test database connectivity.
-    """
+async def check_db():
     try:
-        db = SessionLocal()
-        db.execute(text("SELECT 1"))
-        print("Database connected successfully")
-        db.close()
+        async with AsyncSessionLocal() as db:
+            await db.execute(text("SELECT 1"))
+        print("-------------------- Database connected successfully --------------------")
     except Exception as e:
-        print("Database connection failed:", e)
+        print("-------------------- Database connection failed:", e, " --------------------")

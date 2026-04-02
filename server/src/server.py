@@ -35,7 +35,9 @@ app.add_middleware(
 # DATABASE CONNECTION TEST
 # -----------------------------
 
-check_db()
+@app.on_event("startup")
+async def startup():
+    await check_db()  
 
 
 # -----------------------------

@@ -13,7 +13,7 @@ class Setting(BaseSettings):
     DB_USER: str = "postgres"
     DB_PASSWORD: str = "12345"
     DB_HOST: str = "localhost"
-    DB_NAME: str = "task_db"
+    DB_NAME: str = ""
     DB_OPTIONS: str = ""
 
     DEBUG: bool = True
