@@ -50,4 +50,4 @@ check_db()
 
 @app.get("/")
 async def root():
-    return {"message": "Task Management API Running"}
+    return {"message": "WhatsApp Clone API Running"}
