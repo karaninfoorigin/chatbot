@@ -49,10 +49,19 @@ export default function ChatWindow({ chat, messages, onClose, onSendMessage }: C
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-2">
-        {messages.map((msg) => (
-          <MessageBubble key={msg.id} message={msg} />
-        ))}
+      <div className="flex-1 overflow-y-auto p-4 space-y-0.5">
+        {messages.map((msg, index) => {
+          const nextMsg = messages[index + 1]
+          const isLastOfGroup = !nextMsg || nextMsg.sender !== msg.sender
+          
+          return (
+            <MessageBubble 
+              key={msg.id} 
+              message={msg} 
+              isLastOfGroup={isLastOfGroup}
+            />
+          )
+        })}
         <div ref={bottomRef} />
       </div>
 

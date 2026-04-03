@@ -1,15 +1,19 @@
-from sqlalchemy import String, Integer
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from .base import Base
+from sqlalchemy import Column, Integer, String, TIMESTAMP
+from sqlalchemy.sql import func
+from sqlalchemy.orm import relationship
+from database import Base
+
 
 class User(Base):
-    __tablename__ = "users"
+    __tablename__ = "user"
 
-    id: Mapped[int] = mapped_column(primary_key=True, index=True)
-    username: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
-    email: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
-    password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
+    user_id = Column(Integer, primary_key=True, index=True)
+    phone_number = Column(String(20), nullable=False)
+    username = Column(String(100), nullable=False)
+    profile_picture = Column(String(255))
+    status_message = Column(String(255))
+    last_seen = Column(TIMESTAMP)
+    created_at = Column(TIMESTAMP, server_default=func.now())
 
-    # Relationships
     messages = relationship("Message", back_populates="sender")
-    chats = relationship("ChatParticipant", back_populates="user")
+    chats = relationship("UserChat", back_populates="user")

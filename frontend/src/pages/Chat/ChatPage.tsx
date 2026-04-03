@@ -15,6 +15,7 @@ export default function ChatPage() {
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null)
   const [messagesMap, setMessagesMap] = useState<Record<number, Message[]>>({})
   const [isMobileChatActive, setIsMobileChatActive] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
 
   // Load all messages from localStorage on mount
   useEffect(() => {
@@ -22,9 +23,14 @@ export default function ChatPage() {
     setMessagesMap(savedMessages)
   }, [])
 
+  const filteredChats = chats.filter(chat => 
+    chat.name.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
   const handleSelectChat = (chat: Chat) => {
     setSelectedChat(chat)
     setIsMobileChatActive(true)
+    setSearchQuery("") // Clear search after selection
   }
 
   const handleCloseChat = () => {
@@ -59,21 +65,23 @@ export default function ChatPage() {
       {/* Sidebar */}
       <div
         className={`${
-          isMobileChatActive ? "hidden" : "flex"
-        } sm:flex w-full sm:w-[320px] md:w-[400px] border-r border-[var(--border-primary)]`}
+          isMobileChatActive ? "-translate-x-full opacity-0 absolute" : "translate-x-0 opacity-100"
+        } sm:relative sm:translate-x-0 sm:opacity-100 transition-all duration-300 ease-in-out flex w-full sm:w-[320px] md:w-[400px] border-r border-[var(--border-primary)] shadow-sm z-30`}
       >
         <Sidebar 
-          chats={chats} 
+          chats={filteredChats} 
           selectedChat={selectedChat} 
-          onSelectChat={handleSelectChat} 
+          onSelectChat={handleSelectChat}
+          searchQuery={searchQuery}
+          onSearch={setSearchQuery}
         />
       </div>
 
       {/* Chat Window */}
       <div
         className={`${
-          isMobileChatActive ? "flex" : "hidden"
-        } sm:flex flex-1 bg-[var(--bg-color)]`}
+          isMobileChatActive ? "translate-x-0 opacity-100" : "translate-x-full opacity-0 sm:translate-x-0 sm:opacity-100"
+        } transition-all duration-300 ease-in-out flex-1 flex bg-[var(--bg-color)] z-20`}
       >
         {selectedChat ? (
           <ChatWindow 
@@ -98,5 +106,3 @@ export default function ChatPage() {
     </div>
   )
 }
-
-

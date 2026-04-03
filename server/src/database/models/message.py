@@ -1,19 +1,27 @@
-from sqlalchemy import ForeignKey, Integer, String, Text, DateTime
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from datetime import datetime
-from .base import Base
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, Boolean, TIMESTAMP, CheckConstraint
+from sqlalchemy.sql import func
+from sqlalchemy.orm import relationship
+from database import Base
+
 
 class Message(Base):
-    __tablename__ = "messages"
+    __tablename__ = "message"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    message_id = Column(Integer, primary_key=True, index=True)
+    chat_id = Column(Integer, ForeignKey("chat.chat_id", ondelete="CASCADE"))
+    sender_user_id = Column(Integer, ForeignKey("user.user_id"))
 
-    content: Mapped[str] = mapped_column(Text, nullable=False)
-    sender_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    chat_id: Mapped[int] = mapped_column(ForeignKey("chats.id"))
+    content = Column(Text)
+    message_type = Column(String(20))
+    timestamp = Column(TIMESTAMP, server_default=func.now())
 
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    is_read = Column(Boolean, default=False)
+    is_delivered = Column(Boolean, default=False)
 
-    # Relationships
-    sender = relationship("User", back_populates="messages")
+    __table_args__ = (
+        CheckConstraint("message_type IN ('text','image','video','audio','document')"),
+    )
+
     chat = relationship("Chat", back_populates="messages")
+    sender = relationship("User", back_populates="messages")
+    media = relationship("Media", back_populates="message")
