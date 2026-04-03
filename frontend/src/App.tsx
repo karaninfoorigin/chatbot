@@ -1,12 +1,12 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 import { useState, useEffect } from "react"
+import { ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 import ChatPage from "./pages/Chat/ChatPage"
 import SignIn from "./pages/Signin/SignIn"
 import { storage } from "./utils/localStorage"
+import Homepage from './pages/homepage/Homepage'
 import './App.css'
-import "react-toastify/dist/ReactToastify.css";
-import Homepage from './pages/homepage/Homepage';
-
 
 function App() {
   const [user, setUser] = useState<{ phoneNumber: string } | null>(null)
@@ -29,18 +29,32 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Homepage/>}/>
-        <Route 
-          path="/sign-in" 
-          element={user ? <Navigate to="/chat" /> : <SignIn onSignIn={handleSignIn} />} 
+      <div className="app-container">
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
         />
-        <Route 
-          path="/chat" 
-          element={user ? <ChatPage /> : <Navigate to="/sign-in" />} 
-        />
-        <Route path="*" element={<Navigate to={user ? "/chat" : "/sign-in"} />} />
-      </Routes>
+        <Routes>
+          <Route path='/' element={<Homepage />} />
+          <Route 
+            path="/sign-in" 
+            element={user ? <Navigate to="/chat" /> : <SignIn onSignIn={handleSignIn} />} 
+          />
+          <Route 
+            path="/chat" 
+            element={user ? <ChatPage /> : <Navigate to="/sign-in" />} 
+          />
+          <Route path="*" element={<Navigate to={user ? "/chat" : "/sign-in"} />} />
+        </Routes>
+      </div>
     </BrowserRouter>
   )
 }
