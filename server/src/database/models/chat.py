@@ -1,13 +1,21 @@
-from sqlalchemy import Integer, String
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from .base import Base
+from sqlalchemy import Column, Integer, String, TIMESTAMP, CheckConstraint
+from sqlalchemy.sql import func
+from sqlalchemy.orm import relationship
+from database import Base
+
 
 class Chat(Base):
-    __tablename__ = "chats"
+    __tablename__ = "chat"
 
-    id: Mapped[int] = mapped_column(primary_key=True, index=True)
-    name: Mapped[str] = mapped_column(String(100), nullable=True)
+    chat_id = Column(Integer, primary_key=True, index=True)
+    chat_type = Column(String(20))
+    created_at = Column(TIMESTAMP, server_default=func.now())
+    updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now())
 
-    # Relationships
-    participants = relationship("ChatParticipant", back_populates="chat")
+    __table_args__ = (
+        CheckConstraint("chat_type IN ('individual', 'group')"),
+    )
+
+    users = relationship("UserChat", back_populates="chat")
     messages = relationship("Message", back_populates="chat")
+    group = relationship("Group", uselist=False, back_populates="chat")
