@@ -1,28 +1,61 @@
-
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
+import { useState, useEffect } from "react"
+import { ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import ChatPage from "./pages/Chat/ChatPage"
+import SignIn from "./pages/Signin/SignIn"
+import { storage } from "./utils/localStorage"
+import Homepage from './pages/homepage/Homepage'
 import './App.css'
-import Navbar from './components/header/Navbar'
-import SignIn from './pages/Signin/SignIn'
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import Homepage from './pages/homepage/Homepage';
+
 function App() {
+  const [user, setUser] = useState<{ phoneNumber: string } | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  // Initial load from storage
+  useEffect(() => {
+    const savedUser = storage.getUser()
+    setUser(savedUser)
+    setLoading(false)
+  }, [])
+
+  const handleSignIn = (phoneNumber: string) => {
+    const newUser = { phoneNumber }
+    storage.setUser(newUser)
+    setUser(newUser)
+  }
+
+  if (loading) return null
 
   return (
-    <>
-     <ToastContainer position="top-right" autoClose={3000} />
-      <BrowserRouter>
+    <BrowserRouter>
+      <div className="app-container">
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
         <Routes>
-         <Route path='/' element={<Homepage/>}/>
-          <Route path='/sign-in' element={
-            <>
-              <Navbar />
-              <SignIn />
-            </>
-          } />
+          <Route path='/' element={<Homepage />} />
+          <Route 
+            path="/sign-in" 
+            element={user ? <Navigate to="/chat" /> : <SignIn onSignIn={handleSignIn} />} 
+          />
+          <Route 
+            path="/chat" 
+            element={user ? <ChatPage /> : <Navigate to="/sign-in" />} 
+          />
+          <Route path="*" element={<Navigate to={user ? "/chat" : "/sign-in"} />} />
         </Routes>
-      </BrowserRouter>
-    </>
+      </div>
+    </BrowserRouter>
   )
 }
 

@@ -1,47 +1,30 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import type { Theme } from "../types/theme";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
 
-type ThemeContextType = {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
-  toggleTheme: () => void;
-};
+interface ThemeContextType {
+  theme: string
+  setTheme: (theme: string) => void
+}
 
-const ThemeContext = createContext<ThemeContextType | null>(null);
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
-export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const [theme, setThemeState] = useState<Theme>("light");
+export const ThemeProvider = ({ children }: { children: ReactNode }) => {
+  const [theme, setTheme] = useState("light")
 
-  // Load from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem("theme") as Theme | null;
-    if (saved) setThemeState(saved);
-  }, []);
-
-  // Apply theme + persist
-  useEffect(() => {
-    document.documentElement.className = theme;
-    localStorage.setItem("theme", theme);
-  }, [theme]);
-
-  const setTheme = (theme: Theme) => {
-    setThemeState(theme);
-  };
-
-  const toggleTheme = () => {
-    setThemeState((prev) => (prev === "light" ? "dark" : "light"));
-  };
+    document.body.className = theme
+  }, [theme])
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, setTheme }}>
       {children}
     </ThemeContext.Provider>
-  );
-};
+  )
+}
 
-// Custom hook (clean usage)
 export const useTheme = () => {
-  const context = useContext(ThemeContext);
-  if (!context) throw new Error("useTheme must be used within ThemeProvider");
-  return context;
-};
+  const context = useContext(ThemeContext)
+  if (context === undefined) {
+    throw new Error("useTheme must be used within a ThemeProvider")
+  }
+  return context
+}
