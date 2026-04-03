@@ -1,0 +1,11 @@
+{
+  "1": [
+    { "id": 1, "text": "Hey bro!", "sender": "other" }
+  ],
+  "2": [
+    { "id": 2, "text": "Fix backend", "sender": "other" }
+  ],
+  "3": [
+    { "id": 3, "text": "UI 🔥", "sender": "other" }
+  ]
+}

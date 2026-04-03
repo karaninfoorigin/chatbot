@@ -1,24 +1,42 @@
-
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import './App.css'
-import Navbar from './components/header/Navbar'
-import SignIn from './pages/Signin/SignIn'
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
+import { useState, useEffect } from "react"
+import ChatPage from "./pages/Chat/ChatPage"
+import SignIn from "./pages/Signin/SignIn"
+import { storage } from "./utils/localStorage"
 
 function App() {
+  const [user, setUser] = useState<{ phoneNumber: string } | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  // Initial load from storage
+  useEffect(() => {
+    const savedUser = storage.getUser()
+    setUser(savedUser)
+    setLoading(false)
+  }, [])
+
+  const handleSignIn = (phoneNumber: string) => {
+    const newUser = { phoneNumber }
+    storage.setUser(newUser)
+    setUser(newUser)
+  }
+
+  if (loading) return null
 
   return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path='/sign-in' element={
-            <>
-              <Navbar />
-              <SignIn />
-            </>
-          } />
-        </Routes>
-      </BrowserRouter>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route 
+          path="/sign-in" 
+          element={user ? <Navigate to="/chat" /> : <SignIn onSignIn={handleSignIn} />} 
+        />
+        <Route 
+          path="/chat" 
+          element={user ? <ChatPage /> : <Navigate to="/sign-in" />} 
+        />
+        <Route path="*" element={<Navigate to={user ? "/chat" : "/sign-in"} />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 

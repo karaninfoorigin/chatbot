@@ -1,98 +1,144 @@
-/* Container */
 .signin-container {
+  min-height: 100vh;
   width: 100%;
-  min-height: 80vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
-}
-
-/* Card */
-.signin-card {
-  width: 100%;
-  max-width: 380px;
-  background: var(--surface-color);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  padding: 28px 24px;
-  transition: all 0.3s ease;
-}
-
-/* Title */
-.signin-title {
-  text-align: center;
-  margin-bottom: 24px;
-  font-size: 22px;
-  font-weight: 600;
-}
-
-/* Form */
-.signin-form {
+  position: relative;
+  background-color: var(--bg-color);
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  align-items: center;
+  transition: background-color 0.3s ease;
 }
 
-/* Label */
-.signin-form label {
-  font-size: 14px;
-  color: var(--secondary-text);
+/* Background bar created with a pseudo-element for robustness */
+.signin-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 222px;
+  background-color: var(--whatsapp-green);
+  z-index: 1;
 }
 
-/* Phone input */
-.phone-input {
+.signin-header-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1000px;
+  padding: 27px 40px;
   display: flex;
   align-items: center;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  background: var(--input-bg);
+  gap: 14px;
 }
 
-.phone-input span {
-  padding: 10px 12px;
-  background: var(--bg-color);
-  border-right: 1px solid var(--border-color);
+.logo-text {
+  color: #ffffff;
   font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
 }
 
-.phone-input input {
-  flex: 1;
-  padding: 10px 12px;
+.signin-card {
+  position: relative;
+  z-index: 2;
+  width: calc(100% - 40px);
+  max-width: 900px;
+  background-color: var(--card-bg);
+  border-radius: 3px;
+  box-shadow: 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+  padding: 64px 60px;
+  box-sizing: border-box;
+  min-height: 500px;
+  display: flex;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.signin-form-wrapper {
+  width: 100%;
+  max-width: 440px;
+}
+
+.signin-welcome {
+  color: var(--text-primary);
+  font-size: 28px;
+  font-weight: 300;
+  margin-bottom: 40px;
+}
+
+.info-list p {
+  color: var(--text-primary);
+  font-size: 16px;
+  line-height: 24px;
+  margin: 10px 0;
+}
+
+.text-muted {
+  color: var(--text-secondary);
+}
+
+.phone-input-section {
+  margin-top: 48px;
+}
+
+.phone-label {
+  color: var(--whatsapp-green);
   font-size: 14px;
-  background: transparent;
-}
-
-/* Button */
-.signin-btn {
-  margin-top: 10px;
-  padding: 12px;
-  border-radius: var(--radius-md);
-  background: var(--primary-color);
-  color: white;
   font-weight: 500;
 }
 
-.signin-btn:hover {
-  background: var(--primary-hover);
+.phone-input-group {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 2px solid var(--whatsapp-green);
+  padding-bottom: 8px;
+  margin-top: 8px;
 }
 
-.signin-btn:active {
-  transform: scale(0.98);
+.country-code {
+  color: var(--text-primary);
+  font-size: 18px;
 }
 
-/* ===== RESPONSIVE ===== */
-@media (min-width: 640px) {
+.phone-field {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 18px;
+  color: var(--text-primary);
+  background: transparent;
+}
+
+.signin-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #8696a0;
+  color: #ffffff;
+  border: none;
+  border-radius: 3px;
+  font-weight: 500;
+  font-size: 14px;
+  text-transform: uppercase;
+  cursor: default;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.signin-btn.active {
+  background-color: var(--whatsapp-green);
+  cursor: pointer;
+  pointer-events: all;
+}
+
+.signin-btn.active:hover {
+  background-color: var(--whatsapp-green-hover);
+}
+
+@media (max-width: 900px) {
   .signin-card {
-    padding: 32px;
-  }
-
-  .signin-title {
-    font-size: 24px;
-  }
-
-  .phone-input input {
-    font-size: 15px;
+    padding: 30px;
+    margin-bottom: 40px;
   }
 }
