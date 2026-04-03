@@ -3,6 +3,10 @@ import { useState, useEffect } from "react"
 import ChatPage from "./pages/Chat/ChatPage"
 import SignIn from "./pages/Signin/SignIn"
 import { storage } from "./utils/localStorage"
+import './App.css'
+import "react-toastify/dist/ReactToastify.css";
+import Homepage from './pages/homepage/Homepage';
+
 
 function App() {
   const [user, setUser] = useState<{ phoneNumber: string } | null>(null)
@@ -26,6 +30,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path='/' element={<Homepage/>}/>
         <Route 
           path="/sign-in" 
           element={user ? <Navigate to="/chat" /> : <SignIn onSignIn={handleSignIn} />} 
