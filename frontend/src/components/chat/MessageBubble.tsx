@@ -10,39 +10,23 @@ export default function MessageBubble({ message, isLastOfGroup = true }: Message
   const isMe = message.sender === "me"
 
   return (
-    <div className={`flex ${isMe ? "justify-end" : "justify-start"} mb-[2px] px-2 relative`}>
+    <div className={`bubble-container ${isMe ? "justify-end" : "justify-start"}`}>
       <div
-        className={`max-w-[85%] min-w-[60px] px-2 py-1.5 rounded-lg shadow-sm text-[14.2px] relative transition-colors duration-300 ${
-          isMe
-            ? `bg-[var(--message-me)] text-[var(--text-primary)] ${isLastOfGroup ? "rounded-tr-none" : ""}`
-            : `bg-[var(--message-other)] text-[var(--text-primary)] ${isLastOfGroup ? "rounded-tl-none" : ""}`
-        }`}
+        className={`message-bubble ${isMe ? "bubble-me" : "bubble-other"} ${
+          isLastOfGroup ? "has-tail" : ""
+        } flex flex-col min-h-0 w-fit`}
       >
-        {/* Professional tail using standard CSS triangle */}
-        {isLastOfGroup && (
-          <div 
-            className={`absolute top-0 w-2 h-2 ${isMe ? "-right-[6px]" : "-left-[6px]"}`}
-            style={{ 
-              width: 0,
-              height: 0,
-              borderTop: `8px solid ${isMe ? "var(--message-me)" : "var(--message-other)"}`,
-              borderRight: isMe ? "8px solid transparent" : "none",
-              borderLeft: isMe ? "none" : "8px solid transparent"
-            }}
-          />
-        )}
-
-        {/* Message Content Container */}
-        <div className="relative pb-1 pr-12">
-          <p className="whitespace-pre-wrap break-words leading-[19px]">{message.text}</p>
+        {/* Message Text */}
+        <div className="relative pr-[62px] min-h-[20px]">
+          <p className="whitespace-pre-wrap break-words">{message.text}</p>
           
-          {/* Metadata: Always in the bottom corner */}
-          <div className="absolute right-[-4px] bottom-[-2px] flex items-center gap-1 h-[15px] select-none">
-            <span className="text-[10px] text-[var(--text-secondary)] opacity-70 whitespace-nowrap">
+          {/* Metadata: Fixed at the bottom right */}
+          <div className="absolute right-[-4px] bottom-[-4px] flex items-center gap-1 h-[15px] select-none scale-[0.85] origin-right">
+            <span className="text-[11px] text-[var(--text-secondary)] opacity-80 whitespace-nowrap font-medium">
               {message.timestamp}
             </span>
             {isMe && (
-              <CheckCheck size={14} className="text-[#53bdeb]" />
+              <CheckCheck size={16} className="text-[#53bdeb]" />
             )}
           </div>
         </div>
@@ -50,5 +34,7 @@ export default function MessageBubble({ message, isLastOfGroup = true }: Message
     </div>
   )
 }
+
+
 
 

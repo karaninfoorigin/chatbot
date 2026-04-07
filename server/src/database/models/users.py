@@ -14,6 +14,6 @@ class Users(Base):
     status_message = Column(String(255))
     last_seen = Column(TIMESTAMP)
     created_at = Column(TIMESTAMP, server_default=func.now())
-
+ 
     messages = relationship("Message", back_populates="sender")
-    chats = relationship("UserChat", back_populates="user")
+    chats = relationship("UserChat", back_populates="users")

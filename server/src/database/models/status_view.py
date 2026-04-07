@@ -6,7 +6,7 @@ from src.database.models.base import Base
 class StatusView(Base):
     __tablename__ = "status_view"
 
-    viewer_user_id = Column(Integer, ForeignKey("user.user_id", ondelete="CASCADE"), primary_key=True)
+    viewer_user_id = Column(Integer, ForeignKey("users.user_id", ondelete="CASCADE"), primary_key=True)
     status_id = Column(Integer, ForeignKey("status_story.status_id", ondelete="CASCADE"), primary_key=True)
 
     viewed_at = Column(TIMESTAMP, server_default=func.now())

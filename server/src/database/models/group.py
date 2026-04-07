@@ -9,7 +9,7 @@ class Group(Base):
 
     group_id = Column(Integer, primary_key=True, index=True)
     chat_id = Column(Integer, ForeignKey("chat.chat_id", ondelete="CASCADE"), unique=True)
-    created_by_user_id = Column(Integer, ForeignKey("user.user_id"))
+    created_by_user_id = Column(Integer, ForeignKey("users.user_id"))
     group_name = Column(String(150))
     group_icon = Column(String(255))
     description = Column(Text)

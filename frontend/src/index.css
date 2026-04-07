@@ -33,6 +33,65 @@ body.dark {
   --message-other: #202c33;
 }
 
+/* Global Bubble Styling & Tails */
+.bubble-container {
+  display: flex;
+  width: 100%;
+  margin-bottom: 2px;
+  padding: 0 16px;
+  position: relative;
+}
+
+.message-bubble {
+  max-width: 85%;
+  min-width: 80px;
+  min-height: 32px;
+  padding: 6px 7px 8px 9px;
+  border-radius: 8px;
+  box-shadow: 0 1px 0.5px rgba(11, 20, 26, 0.13);
+  position: relative;
+  font-size: 14.2px;
+  line-height: 19px;
+  transition: background-color 0.3s ease;
+  flex-shrink: 0;
+}
+
+/* Tail Common */
+.message-bubble.has-tail::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 12px;
+  height: 13px;
+  display: block;
+}
+
+/* Tail Me (Right) */
+.message-bubble.bubble-me {
+  background-color: var(--message-me);
+  color: var(--text-primary);
+  border-top-right-radius: 0;
+}
+
+.message-bubble.bubble-me.has-tail::after {
+  right: -8px;
+  background-color: var(--message-me);
+  clip-path: polygon(0 0, 0 100%, 100% 0);
+}
+
+/* Tail Other (Left) */
+.message-bubble.bubble-other {
+  background-color: var(--message-other);
+  color: var(--text-primary);
+  border-top-left-radius: 0;
+}
+
+.message-bubble.bubble-other.has-tail::after {
+  left: -8px;
+  background-color: var(--message-other);
+  clip-path: polygon(100% 0, 100% 100%, 0 0);
+}
+
 html, body, #root {
   height: 100%;
   width: 100%;

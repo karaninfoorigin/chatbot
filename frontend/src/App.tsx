@@ -46,11 +46,11 @@ function App() {
           <Route path='/' element={<Homepage />} />
           <Route 
             path="/sign-in" 
-            element={user ? <Navigate to="/chat" /> : <SignIn onSignIn={handleSignIn} />} 
+            element={<SignIn  />} 
           />
           <Route 
             path="/chat" 
-            element={user ? <ChatPage /> : <Navigate to="/sign-in" />} 
+            element={ <ChatPage /> } 
           />
           <Route path="*" element={<Navigate to={user ? "/chat" : "/sign-in"} />} />
         </Routes>

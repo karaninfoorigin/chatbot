@@ -7,11 +7,11 @@ from src.database.models.base import Base
 class UserChat(Base):
     __tablename__ = "user_chat"
 
-    user_id = Column(Integer, ForeignKey("user.user_id", ondelete="CASCADE"), primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.user_id", ondelete="CASCADE"), primary_key=True)
     chat_id = Column(Integer, ForeignKey("chat.chat_id", ondelete="CASCADE"), primary_key=True)
 
     role = Column(String(50))
     joined_at = Column(TIMESTAMP, server_default=func.now())
 
-    user = relationship("User", back_populates="chats")
+    users = relationship("Users", back_populates="chats")
     chat = relationship("Chat", back_populates="users")
