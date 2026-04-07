@@ -46,7 +46,7 @@ function App() {
           <Route path='/' element={<Homepage />} />
           <Route 
             path="/sign-in" 
-            element={<SignIn onSignIn={handleSignIn} />} 
+            element={<SignIn  />} 
           />
           <Route 
             path="/chat" 

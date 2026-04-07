@@ -7,7 +7,7 @@ class StatusStory(Base):
     __tablename__ = "status_story"
 
     status_id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("user.user_id", ondelete="CASCADE"))
+    user_id = Column(Integer, ForeignKey("users.user_id", ondelete="CASCADE"))
 
     content = Column(Text)
     media_url = Column(String(255))

@@ -9,7 +9,7 @@ class Message(Base):
 
     message_id = Column(Integer, primary_key=True, index=True)
     chat_id = Column(Integer, ForeignKey("chat.chat_id", ondelete="CASCADE"))
-    sender_user_id = Column(Integer, ForeignKey("user.user_id"))
+    sender_user_id = Column(Integer, ForeignKey("users.user_id"))
 
     content = Column(Text)
     message_type = Column(String(20))
@@ -23,5 +23,5 @@ class Message(Base):
     )
 
     chat = relationship("Chat", back_populates="messages")
-    sender = relationship("User", back_populates="messages")
+    sender = relationship("Users", back_populates="messages")
     media = relationship("Media", back_populates="message")
