@@ -7,25 +7,25 @@ import SignIn from "./pages/Signin/SignIn"
 import { storage } from "./utils/localStorage"
 import Homepage from './pages/homepage/Homepage'
 import './App.css'
-
+import { useUser } from "./context/UserContext"
 function App() {
-  const [user, setUser] = useState<{ phoneNumber: string } | null>(null)
+  // const [user, setUser] = useState<{ phoneNumber: string } | null>(null)
   const [loading, setLoading] = useState(true)
-
+  const {user} = useUser()
   // Initial load from storage
-  useEffect(() => {
-    const savedUser = storage.getUser()
-    setUser(savedUser)
-    setLoading(false)
-  }, [])
+  // useEffect(() => {
+  //   const savedUser = storage.getUser()
+  //   setUser(savedUser)
+  //   setLoading(false)
+  // }, [])
 
-  const handleSignIn = (phoneNumber: string) => {
-    const newUser = { phoneNumber }
-    storage.setUser(newUser)
-    setUser(newUser)
-  }
+  // const handleSignIn = (phoneNumber: string) => {
+  //   const newUser = { phoneNumber }
+  //   storage.setUser(newUser)
+  //   setUser(newUser)
+  // }
 
-  if (loading) return null
+
 
   return (
     <BrowserRouter>
