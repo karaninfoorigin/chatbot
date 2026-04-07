@@ -62,11 +62,11 @@ export default function ChatPage() {
 
   return (
     <div className="h-screen flex overflow-hidden bg-[var(--bg-color)] transition-colors duration-300">
-      {/* Sidebar */}
+      {/* Sidebar - Hidden on mobile when chat is active */}
       <div
         className={`${
-          isMobileChatActive ? "-translate-x-full opacity-0 absolute" : "translate-x-0 opacity-100"
-        } sm:relative sm:translate-x-0 sm:opacity-100 transition-all duration-300 ease-in-out flex w-full sm:w-[320px] md:w-[400px] border-r border-[var(--border-primary)] shadow-sm z-30`}
+          isMobileChatActive ? "hidden" : "flex"
+        } sm:flex w-full sm:w-[320px] md:w-[400px] border-r border-[var(--border-primary)] shadow-sm`}
       >
         <Sidebar 
           chats={filteredChats} 
@@ -77,11 +77,11 @@ export default function ChatPage() {
         />
       </div>
 
-      {/* Chat Window */}
+      {/* Chat Window - Hidden on mobile when no chat is active */}
       <div
         className={`${
-          isMobileChatActive ? "translate-x-0 opacity-100" : "translate-x-full opacity-0 sm:translate-x-0 sm:opacity-100"
-        } transition-all duration-300 ease-in-out flex-1 flex bg-[var(--bg-color)] z-20`}
+          isMobileChatActive ? "flex" : "hidden"
+        } sm:flex flex-1 flex bg-[var(--bg-color)]`}
       >
         {selectedChat ? (
           <ChatWindow 
@@ -105,4 +105,4 @@ export default function ChatPage() {
       </div>
     </div>
   )
-}
+}
