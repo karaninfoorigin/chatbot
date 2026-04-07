@@ -10,3 +10,10 @@ export const addContact = async (data: AddContactPayload) => {
   const response = await api.post("/contacts/", data)
   return response.data
 }
+
+export const getContacts = async (owner_phone: string) => {
+  const response = await api.get("/contacts/", {
+    params: { owner_phone }
+  })
+  return response.data
+}

@@ -67,7 +67,7 @@ export default function Sidebar({
       if (contactData) {
         toast.success("Contact added successfully")
         onAddContact?.({
-          id: contactData.contact_user_id,
+          id: contactData.contact_id,
           name: contactData.saved_name || contactPhone,
         })
         setContactPhone("")

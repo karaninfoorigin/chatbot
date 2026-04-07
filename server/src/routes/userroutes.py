@@ -3,7 +3,7 @@ from src.schema.authSchema import PhoneRequest
 from src.services.userservice import login_or_register
 from utils.jwthandler import decode_access_token
 from src.common.response import Response as authResponse, send_response
-from src.database.session import DBSession,get_db
+from src.database.session import DBSession, get_db
 from fastapi import Depends
 userRouter = APIRouter(prefix="/auth", tags=["Auth"])
 
@@ -20,7 +20,7 @@ def validate_phone_number(phone: str):
 
 
 @userRouter.post("/login", response_model=authResponse)
-async def login(data: PhoneRequest, response: Response, db: DBSession  ):
+async def login(data: PhoneRequest, response: Response, db: DBSession):
     print("i am here ")
     phone = data.phone.strip()
     validate_phone_number(phone)

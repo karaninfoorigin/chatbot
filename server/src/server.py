@@ -6,6 +6,7 @@ from src.database.session import check_db
 from src.routes.userroutes import userRouter
 from src.routes.messageroutes import messageRouter
 from src.routes.contactroutes import contactRouter
+from src.routes.chatroutes import chatRouter
 
 # ROUTES
 
@@ -48,6 +49,7 @@ async def startup():
 app.include_router(userRouter)
 app.include_router(messageRouter)
 app.include_router(contactRouter)
+app.include_router(chatRouter)
 
 
 # -----------------------------

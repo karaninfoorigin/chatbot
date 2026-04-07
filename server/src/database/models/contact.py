@@ -15,3 +15,4 @@ class Contact(Base):
     added_at = Column(TIMESTAMP, server_default=func.now())
 
     owner = relationship("Users", foreign_keys=[owner_user_id])
+    contact_user = relationship("Users", foreign_keys=[contact_user_id])
