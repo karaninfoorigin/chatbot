@@ -1,10 +1,11 @@
 from fastapi import APIRouter, HTTPException, Response, Cookie
 from src.schema.authSchema import PhoneRequest
-from src.services.userservice import login_or_register
+from src.services.userservice import login_or_register, fetchMe
 from utils.jwthandler import decode_access_token
 from src.common.response import Response as authResponse, send_response
 from src.database.session import DBSession,get_db
 from fastapi import Depends
+from src.middlewares.auth import authenticate
 userRouter = APIRouter(prefix="/auth", tags=["Auth"])
 
 
@@ -38,6 +39,10 @@ async def login(data: PhoneRequest, response: Response, db: DBSession  ):
 
     return send_response(201, "Logged In Successfully", result)
 
+
+@userRouter.get("/fetchMe")
+async def fetchMeRoute(response: Response, db : DBSession, user_id : int = Depends(authenticate)):
+    return await fetchMe(user_id, db)
 
 @userRouter.post("/logout")
 async def logout(response: Response):

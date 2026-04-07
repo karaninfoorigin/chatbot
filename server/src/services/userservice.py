@@ -31,3 +31,16 @@ async def login_or_register(phone_number: str, db: DBSession):
         "access_token": token,
         "message": "User registered and logged in"
     }
+
+
+async def fetchMe(user_id : int, db : DBSession):
+    print(f"********************* {user_id} *************************")
+    result = await db.execute(select(Users).where(Users.user_id == user_id))
+    user = result.scalar_one_or_none()
+    if user:
+        return {
+            "id": user.user_id,
+            "phone_number": user.phone_number,
+            
+    }
+
