@@ -4,6 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.config.setting import settings
 from src.database.session import check_db
 from src.routes.userroutes import userRouter
+from src.routes.messageroutes import messageRouter
+from src.routes.contactroutes import contactRouter
 
 # ROUTES
 
@@ -44,6 +46,8 @@ async def startup():
 # ROUTES
 # -----------------------------
 app.include_router(userRouter)
+app.include_router(messageRouter)
+app.include_router(contactRouter)
 
 
 # -----------------------------

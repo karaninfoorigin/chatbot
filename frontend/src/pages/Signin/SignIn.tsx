@@ -4,6 +4,7 @@ import { signin } from "../../utils/api/signin_api";
 import { useState } from "react";
 import { validatePhone } from "../../utils/validations/telValidation";
 import { toast } from "react-toastify";
+import { storage } from "../../utils/localStorage"
 import { WaIcon } from "../../components/svg/svgs";
 import { LockIcon } from "lucide-react";
 import { BoltIcon } from "lucide-react";
@@ -30,6 +31,7 @@ const SignIn = () => {
     try {
       const response = await signin({ phone });
       if (response?.status === 201) {
+        storage.setUser({ phoneNumber: phone, id: response?.data?.id })
         toast.success(response.message);
         navigate("/chats");
       }

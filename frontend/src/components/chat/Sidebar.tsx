@@ -1,5 +1,10 @@
+import { useState } from "react"
 import { FaPlus, FaMoon, FaSun } from "react-icons/fa"
+import { toast } from "react-toastify"
 import { useTheme } from "../../context/ThemeContext"
+import { addContact } from "../../utils/api/contact_api"
+import { storage } from "../../utils/localStorage"
+import { validatePhone } from "../../utils/validations/telValidation"
 import type { Chat } from "../../utils/localStorage"
 
 interface SidebarProps {
@@ -8,6 +13,7 @@ interface SidebarProps {
   onSelectChat: (chat: Chat) => void
   searchQuery: string
   onSearch: (query: string) => void
+  onAddContact?: (chat: Chat) => void
 }
 
 const getInitials = (name: string) => {
@@ -28,28 +34,108 @@ export default function Sidebar({
   selectedChat, 
   onSelectChat,
   searchQuery,
-  onSearch
+  onSearch,
+  onAddContact
 }: SidebarProps) {
   const { theme, setTheme } = useTheme()
+  const [isAddOpen, setIsAddOpen] = useState(false)
+  const [contactPhone, setContactPhone] = useState("")
+  const [contactName, setContactName] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const handleCreateContact = async () => {
+    if (!validatePhone(contactPhone)) {
+      toast.error("Enter a valid 10-digit phone number")
+      return
+    }
+
+    const user = storage.getUser()
+    if (!user?.phoneNumber) {
+      toast.error("Please sign in to add contacts")
+      return
+    }
+
+    setIsSubmitting(true)
+    try {
+      const response = await addContact({
+        owner_phone: user.phoneNumber,
+        contact_phone: contactPhone,
+        saved_name: contactName || undefined,
+      })
+
+      const contactData = response?.data
+      if (contactData) {
+        toast.success("Contact added successfully")
+        onAddContact?.({
+          id: contactData.contact_user_id,
+          name: contactData.saved_name || contactPhone,
+        })
+        setContactPhone("")
+        setContactName("")
+        setIsAddOpen(false)
+      }
+    } catch (err: any) {
+      console.error(err)
+      toast.error(err?.response?.data?.detail || err?.message || "Failed to add contact")
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   return (
     <div className="flex flex-col h-full w-full bg-[var(--card-bg)] border-r border-[var(--border-primary)] transition-colors duration-300">
       {/* Header */}
-      <div className="flex justify-between items-center p-3 h-[64px] bg-[var(--header-bg)] border-b border-[var(--border-primary)]">
-        <div className="w-10 h-10 bg-gray-400 rounded-full flex items-center justify-center text-white text-xs font-bold">
-          ME
+      <div className="flex flex-col gap-2 p-3 bg-[var(--header-bg)] border-b border-[var(--border-primary)]">
+        <div className="flex justify-between items-center h-[64px]">
+          <div className="w-10 h-10 bg-gray-400 rounded-full flex items-center justify-center text-white text-xs font-bold">
+            ME
+          </div>
+          <div className="flex gap-3 items-center">
+            <button
+              onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+              className="text-[var(--text-secondary)] hover:bg-[var(--sidebar-hover)] p-2 rounded-full transition-colors"
+            >
+              {theme === "light" ? <FaMoon /> : <FaSun />}
+            </button>
+            <button
+              onClick={() => setIsAddOpen(prev => !prev)}
+              className="text-[var(--text-secondary)] hover:bg-[var(--sidebar-hover)] p-2 rounded-full transition-colors"
+            >
+              <FaPlus />
+            </button>
+          </div>
         </div>
-        <div className="flex gap-4">
-          <button
-            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-            className="text-[var(--text-secondary)] hover:bg-[var(--sidebar-hover)] p-2 rounded-full transition-colors"
-          >
-            {theme === "light" ? <FaMoon /> : <FaSun />}
-          </button>
-          <button className="text-[var(--text-secondary)] hover:bg-[var(--sidebar-hover)] p-2 rounded-full transition-colors">
-            <FaPlus />
-          </button>
-        </div>
+
+        {isAddOpen && (
+          <div className="space-y-3">
+            <div className="text-sm font-semibold text-[var(--text-primary)]">Add contact</div>
+            <div className="grid gap-2">
+              <input
+                type="tel"
+                value={contactPhone}
+                maxLength={10}
+                onChange={(e) => setContactPhone(e.target.value.replace(/\D/g, ""))}
+                placeholder="Phone number"
+                className="w-full rounded-xl border border-[var(--border-primary)] bg-[var(--card-bg)] px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[var(--whatsapp-green)]"
+              />
+              <input
+                type="text"
+                value={contactName}
+                onChange={(e) => setContactName(e.target.value)}
+                placeholder="Save as (optional)"
+                className="w-full rounded-xl border border-[var(--border-primary)] bg-[var(--card-bg)] px-3 py-2 text-[var(--text-primary)] focus:outline-none focus:border-[var(--whatsapp-green)]"
+              />
+              <button
+                type="button"
+                onClick={handleCreateContact}
+                disabled={isSubmitting}
+                className="w-full rounded-xl bg-[var(--whatsapp-green)] px-3 py-2 text-white font-semibold transition-colors disabled:opacity-60"
+              >
+                {isSubmitting ? "Adding..." : "Add contact"}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Search */}
@@ -111,4 +197,4 @@ export default function Sidebar({
     </div>
   )
 }
-
+

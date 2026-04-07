@@ -1,0 +1,78 @@
+.chat-page {
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.chat-page .chat-panel {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.chat-page .chat-sidebar {
+  border-right: 1px solid var(--border-primary);
+  background: var(--card-bg);
+}
+
+.chat-page .chat-window-wrapper {
+  flex: 1;
+  background: var(--bg-color);
+  display: flex;
+  min-height: 100vh;
+}
+
+.chat-page .chat-empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.message-bubble {
+  max-width: 78%;
+  word-break: break-word;
+}
+
+@media (max-width: 768px) {
+  .chat-page .chat-panel {
+    flex-direction: column;
+  }
+
+  .chat-page .chat-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border-primary);
+  }
+
+  .chat-page .chat-window-wrapper {
+    min-height: calc(100vh - 64px);
+  }
+
+  .message-bubble {
+    max-width: 92%;
+  }
+}
+
+@media (max-width: 640px) {
+  .chat-page {
+    min-height: 100vh;
+  }
+
+  .bubble-container {
+    padding: 0 0.75rem;
+  }
+
+  .message-bubble {
+    font-size: 0.95rem;
+  }
+
+  .message-bubble.has-tail::after {
+    width: 10px;
+    height: 11px;
+  }
+}
