@@ -1,22 +1,71 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Sidebar from "../../components/chat/Sidebar"
 import ChatWindow from "../../components/chat/ChatWindow"
 import { type Chat, type Message } from "../../utils/localStorage"
 import { storage } from "../../utils/localStorage"
+import { getChats } from "../../utils/api/chat_api.ts"
+import { getContacts } from "../../utils/api/contact_api.ts"
 import "./ChatPage.css"
 
-const mockChats: Chat[] = [
-  { id: 1, name: "Karan" },
-  { id: 2, name: "Abhay" },
-  { id: 3, name: "Divyansh" },
-]
-
 export default function ChatPage() {
-  const [chats, setChats] = useState<Chat[]>(mockChats)
+  const [chats, setChats] = useState<Chat[]>([])
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null)
   const [messagesMap, setMessagesMap] = useState<Record<number, Message[]>>(storage.getAllMessages())
   const [isMobileChatActive, setIsMobileChatActive] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
+
+  useEffect(() => {
+    const loadUserData = async () => {
+      const user = storage.getUser()
+      if (!user?.phoneNumber) return
+
+      try {
+        const [chatResponse, contactResponse] = await Promise.all([
+          getChats(user.phoneNumber),
+          getContacts(user.phoneNumber),
+        ])
+
+        interface BackendChat {
+          chat_id: number
+          members?: Array<{ username?: string }>
+          last_message?: { text?: string } | null
+        }
+
+        interface BackendContact {
+          contact_id: number
+          saved_name?: string
+          username?: string
+          phone_number?: string
+        }
+
+        const backendChats: Chat[] = Array.isArray(chatResponse?.data)
+          ? (chatResponse.data as BackendChat[]).map((item) => ({
+              id: item.chat_id,
+              name: item.members?.[0]?.username || `Chat ${item.chat_id}`,
+              lastMessage: item.last_message?.text || undefined,
+            }))
+          : []
+
+        const backendContacts: Chat[] = Array.isArray(contactResponse?.data)
+          ? (contactResponse.data as BackendContact[]).map((item) => ({
+              id: item.contact_id,
+              name: item.saved_name || item.username || item.phone_number || `Contact ${item.contact_id}`,
+            }))
+          : []
+
+        const uniqueChats = [...backendContacts, ...backendChats].reduce<Chat[]>((acc, chat) => {
+          if (!acc.some(item => item.id === chat.id)) acc.push(chat)
+          return acc
+        }, [])
+
+        setChats(uniqueChats)
+      } catch (err) {
+        console.error("Failed to load chats or contacts", err)
+      }
+    }
+
+    loadUserData()
+  }, [])
 
   const filteredChats = chats.filter(chat =>
     chat.name.toLowerCase().includes(searchQuery.toLowerCase())

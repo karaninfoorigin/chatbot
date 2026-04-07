@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from src.common.response import send_response
 from src.database.session import get_db
 from src.schema.contactSchema import ContactCreate
-from src.services.contactservice import add_contact
+from src.services.contactservice import add_contact, get_contacts
 
 contactRouter = APIRouter(prefix="/contacts", tags=["Contacts"])
 
@@ -25,3 +25,13 @@ async def create_contact(data: ContactCreate, db = Depends(get_db)):
             "added_at": contact.added_at.isoformat() if contact.added_at else None,
         },
     )
+
+
+@contactRouter.get("/", response_model=dict)
+async def fetch_contacts(owner_phone: str, db = Depends(get_db)):
+    try:
+        contacts = await get_contacts(owner_phone, db)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+
+    return send_response(200, "Contacts fetched successfully", contacts)

@@ -9,6 +9,9 @@ from sqlalchemy.ext.asyncio import (
 )
 
 from src.config.setting import settings
+from src.database.models.base import Base
+# Import all models so metadata is populated
+from src.database.models import Users, Chat, UserChat, Group, Message, Media, Contact, StatusStory, StatusView
 
 
 DATABASE_URL = (
@@ -41,6 +44,9 @@ DBSession = Annotated[AsyncSession, Depends(get_db)]
 
 async def check_db():
     try:
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+
         async with AsyncSessionLocal() as db:
             await db.execute(text("SELECT 1"))
         print("-------------------- Database connected successfully --------------------")
