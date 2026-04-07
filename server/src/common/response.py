@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
-
-class Response:
+from pydantic import BaseModel
+class Response(BaseModel):
     success :bool = True
     status :int = 200
     message :str

@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from src.config.setting import settings
 from src.database.session import check_db
-
+from src.routes.userroutes import userRouter
 
 # ROUTES
 
@@ -43,7 +43,7 @@ async def startup():
 # -----------------------------
 # ROUTES
 # -----------------------------
-
+app.include_router(userRouter)
 
 
 # -----------------------------
