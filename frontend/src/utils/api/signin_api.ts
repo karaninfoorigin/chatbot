@@ -5,6 +5,6 @@ interface data{
 }
 
 export const signin = async (data : data) => {
-  const res = await api.post("/signin", data);
+  const res = await api.post("/auth/login", data);
   return res.data;
 };

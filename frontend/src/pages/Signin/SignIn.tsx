@@ -1,100 +1,165 @@
-import React, { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { MessageSquare } from "lucide-react"
-import { toast } from "react-toastify"
-import { signin } from "../../utils/api/signin_api"
-import { validatePhone } from "../../utils/validations/telValidation"
-import "./SignIn.css"
+import "./SignIn.css";
+import { useNavigate } from "react-router-dom";
+import { signin } from "../../utils/api/signin_api";
+import { useState } from "react";
+import { validatePhone } from "../../utils/validations/telValidation";
+import { toast } from "react-toastify";
+import { WaIcon } from "../../components/svg/svgs";
+import { LockIcon } from "lucide-react";
+import { BoltIcon } from "lucide-react";
+import { GlobeIcon } from "lucide-react";
+import { ArrowIcon } from "../../components/svg/svgs";
+import { InfoIcon } from "../../components/svg/svgs";
 
-interface SignInProps {
-  onSignIn: (phoneNumber: string) => void
-}
-
-const SignIn = ({ onSignIn }: SignInProps) => {
-  const [phoneNumber, setPhoneNumber] = useState("")
-  const navigate = useNavigate()
+// ── SignIn ────────────────────────────────────────────────────
+const SignIn = () => {
+  const [phone, setPhone] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSignIn = async () => {
-    if (!phoneNumber) {
-      toast.error("Phone number is required")
-      return
+    if (!phone) {
+      toast.error("Phone number is required");
+      return;
     }
-
-    if (!validatePhone(phoneNumber)) {
-      toast.error("Enter a valid 10-digit phone number")
-      return
+    if (!validatePhone(phone)) {
+      toast.error("Enter a valid 10-digit phone number");
+      return;
     }
-
+    setLoading(true);
     try {
-      const response = await signin({ phone: phoneNumber })
-
+      const response = await signin({ phone });
       if (response?.status === 201) {
-        // Update global state & persistence
-        onSignIn("+91" + phoneNumber)
-        
-        toast.success(response.message || "Logged In Successfully")
-        navigate("/chat")
-      } else {
-        toast.error(response?.message || "Login failed")
+        toast.success(response.message);
+        navigate("/chats");
       }
     } catch (err) {
-      toast.error("Something went wrong with the server")
-      console.error(err)
+      toast.error("Something went wrong");
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/\D/g, "")
-    if (value.length <= 10) {
-      setPhoneNumber(value)
-    }
-  }
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") handleSignIn();
+  };
 
   return (
-    <div className="signin-container">
-      {/* Branding Header Section */}
-      <div className="signin-header-content">
-        <MessageSquare className="logo-icon text-white" size={32} fill="#ffffff" strokeWidth={1} />
-        <span className="logo-text">WHATSAPP WEB</span>
-      </div>
+    <div className="signin-page">
 
-      {/* Main Sign-in Card */}
-      <div className="signin-card shadow-lg animate-in fade-in duration-500">
-        <div className="signin-form-wrapper">
-          <h1 className="signin-welcome">To use WhatsApp on your computer:</h1>
-          
-          <div className="info-list">
-            <p>1. Enter your phone number below</p>
-            <p className="text-muted">2. Tap Continue to proceed</p>
-          </div>
+      {/* ── LEFT PANEL ── */}
+      <div className="signin-left">
+        <div className="sl-orb sl-orb-1" />
+        <div className="sl-orb sl-orb-2" />
+        <div className="sl-grid" />
 
-          <div className="phone-input-section mt-12">
-            <label className="phone-label">Phone Number</label>
-            <div className="phone-input-group mt-2">
-              <span className="country-code">+91</span>
-              <input
-                type="tel"
-                placeholder="Enter 10-digit number"
-                value={phoneNumber}
-                onChange={handleChange}
-                className="phone-field"
-                autoFocus
-              />
+        <div className="signin-left-content">
+          <div className="sl-logo"><WaIcon /></div>
+
+          <h1 className="sl-headline">
+            Chat without<br />
+            <span className="accent">limits.</span>
+          </h1>
+
+          <p className="sl-sub">
+            Connect with anyone, anywhere — free calls,
+            messages and more, all protected by end-to-end encryption.
+          </p>
+
+          <div className="sl-pills">
+            <div className="sl-pill">
+              <div className="sl-pill-icon" style={{ background: "rgba(37,211,102,0.12)" }}>
+                <LockIcon />
+              </div>
+              <div className="sl-pill-text">
+                <div className="sl-pill-title">End-to-End Encrypted</div>
+                <div className="sl-pill-sub">Only you can read your messages</div>
+              </div>
             </div>
-          </div>
-
-          <div className="mt-12">
-            <button 
-              className={`signin-btn ${phoneNumber.length === 10 ? "active" : ""}`} 
-              onClick={handleSignIn}
-            >
-              Continue
-            </button>
+            <div className="sl-pill">
+              <div className="sl-pill-icon" style={{ background: "rgba(0,168,255,0.12)" }}>
+                <BoltIcon />
+              </div>
+              <div className="sl-pill-text">
+                <div className="sl-pill-title">Instant Delivery</div>
+                <div className="sl-pill-sub">Messages arrive in milliseconds</div>
+              </div>
+            </div>
+            <div className="sl-pill">
+              <div className="sl-pill-icon" style={{ background: "rgba(253,203,110,0.14)" }}>
+                <GlobeIcon />
+              </div>
+              <div className="sl-pill-text">
+                <div className="sl-pill-title">Works Everywhere</div>
+                <div className="sl-pill-sub">Available in 180+ countries</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  )
-}
 
-export default SignIn
+      {/* ── RIGHT PANEL ── */}
+      <div className="signin-right">
+        <div className="signin-card">
+
+          {/* Card header */}
+          <div className="signin-card-header">
+            <div className="signin-card-icon"><WaIcon /></div>
+            <h2 className="signin-title">Welcome back</h2>
+            <p className="signin-subtitle">
+              Enter your phone number to sign in<br />or create a new account
+            </p>
+          </div>
+
+          {/* Form */}
+          <div className="signin-form">
+            <div className="signin-field">
+              <label className="signin-label">Phone Number</label>
+              <div className="phone-input">
+                <div className="phone-prefix">
+                  <span className="flag-emoji">🇮🇳</span>
+                  <span>+91</span>
+                </div>
+                <input
+                  type="tel"
+                  placeholder="98765 43210"
+                  value={phone}
+                  maxLength={10}
+                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
+                  onKeyDown={handleKeyDown}
+                  autoFocus
+                />
+              </div>
+              <div className="signin-helper">
+                <InfoIcon />
+                <span>We'll send a verification code to confirm your number.</span>
+              </div>
+            </div>
+
+            <button
+              className="signin-btn"
+              onClick={handleSignIn}
+              disabled={loading}
+            >
+              {loading ? (
+                <>Verifying…</>
+              ) : (
+                <>
+                  Continue
+                  <ArrowIcon />
+                </>
+              )}
+            </button>
+
+          
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  );
+};
+
+export default SignIn;

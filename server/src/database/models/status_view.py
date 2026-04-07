@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, ForeignKey, TIMESTAMP
 from sqlalchemy.sql import func
-from database import Base
+from src.database.models.base import Base
 
 
 class StatusView(Base):
