@@ -36,7 +36,7 @@ async def login(data: PhoneRequest, response: Response, db: DBSession  ):
         max_age=86400
     )
 
-    return send_response(201, "Logged In Successfully")
+    return send_response(201, "Logged In Successfully", result)
 
 
 @userRouter.post("/logout")

@@ -22,7 +22,7 @@ export const storage = {
     return data ? JSON.parse(data) : null
   },
 
-  setUser: (user: { phoneNumber: string }) => {
+  setUser: (user: { phoneNumber: string; id?: number }) => {
     localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user))
   },
 
