@@ -49,10 +49,10 @@ function App() {
             element={<SignIn  />} 
           />
           <Route 
-            path="/chat" 
+            path="/chats" 
             element={ <ChatPage /> } 
           />
-          <Route path="*" element={<Navigate to={user ? "/chat" : "/sign-in"} />} />
+          {/* <Route path="*" element={<Navigate to={user ? "/chat" : "/sign-in"} />} /> */}
         </Routes>
       </div>
     </BrowserRouter>
