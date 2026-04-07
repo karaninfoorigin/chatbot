@@ -6,7 +6,7 @@ import { addContact } from "../../utils/api/contact_api"
 import { storage } from "../../utils/localStorage"
 import { validatePhone } from "../../utils/validations/telValidation"
 import type { Chat } from "../../utils/localStorage"
-
+import { useUser } from "../../context/UserContext"
 interface SidebarProps {
   chats: Chat[]
   selectedChat: Chat | null
@@ -42,7 +42,7 @@ export default function Sidebar({
   const [contactPhone, setContactPhone] = useState("")
   const [contactName, setContactName] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
-
+const {user} = useUser()
   const handleCreateContact = async () => {
     if (!validatePhone(contactPhone)) {
       toast.error("Enter a valid 10-digit phone number")
@@ -88,7 +88,7 @@ export default function Sidebar({
       <div className="flex flex-col gap-2 p-3 bg-[var(--header-bg)] border-b border-[var(--border-primary)]">
         <div className="flex justify-between items-center h-[64px]">
           <div className="w-10 h-10 bg-gray-400 rounded-full flex items-center justify-center text-white text-xs font-bold">
-            ME
+            {user ? user.phone_number : 'Me'}
           </div>
           <div className="flex gap-3 items-center">
             <button
