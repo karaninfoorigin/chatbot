@@ -1,10 +1,11 @@
 from datetime import datetime, timezone
 from pydantic import BaseModel
+
 class Response(BaseModel):
     success :bool = True
     status :int = 200
     message :str
-    data :dict
+    data :dict | list | None = None
     timestamp :datetime = datetime.now(timezone.utc).isoformat()
 
 
