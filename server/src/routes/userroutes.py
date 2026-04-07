@@ -21,7 +21,7 @@ def validate_phone_number(phone: str):
 
 @userRouter.post("/login", response_model=authResponse)
 async def login(data: PhoneRequest, response: Response, db: DBSession  ):
-    print("i am here")
+    print("i am here ")
     phone = data.phone.strip()
     validate_phone_number(phone)
 
