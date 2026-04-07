@@ -53,6 +53,7 @@ function App() {
             element={ <ChatPage /> } 
           />
           {/* <Route path="*" element={<Navigate to={user ? "/chat" : "/sign-in"} />} /> */}
+          
         </Routes>
       </div>
     </BrowserRouter>
