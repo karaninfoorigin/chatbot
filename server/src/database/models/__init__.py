@@ -1,4 +1,4 @@
-from .user import User
+from .users import Users
 from .chat import Chat
 from .user_chat import UserChat
 from .group import Group

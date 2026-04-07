@@ -1,5 +1,5 @@
 # server/utils/jwthandler.py
-import jwt
+from jose import jwt
 from datetime import datetime, timedelta
 
 SECRET_KEY = "your_secret_key"

@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, Boolean, TIMESTAMP, CheckConstraint
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
-from database import Base
+from src.database.models.base import Base
 
 
 class Message(Base):

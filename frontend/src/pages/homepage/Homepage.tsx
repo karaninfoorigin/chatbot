@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 
 
 // ── Phone Mockup ──────────────────────────────────────────────
-const PhoneMockup = ({ msgs, name, initials, color, status, side }) => (
+const PhoneMockup = ({ msgs, name, initials, color, status, side } : any) => (
   <div className={`phone-mockup ${side ? "side" : "center"}`}>
     <div className="phone-notch"><div className="phone-notch-pill" /></div>
     <div className="phone-chat-header">
@@ -27,7 +27,7 @@ const PhoneMockup = ({ msgs, name, initials, color, status, side }) => (
       </div>
     </div>
     <div className="phone-messages">
-      {msgs.map((m, i) => (
+      {msgs.map((m: any, i: any) => (
         <div key={i} className={`phone-msg ${m.type}`}>
           {m.text}
           <div className="phone-msg-time">{m.time}</div>

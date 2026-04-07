@@ -1,11 +1,11 @@
 from sqlalchemy import Column, Integer, String, TIMESTAMP
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
-from database import Base
+from src.database.models.base import Base
 
 
-class User(Base):
-    __tablename__ = "user"
+class Users(Base):
+    __tablename__ = "users"
 
     user_id = Column(Integer, primary_key=True, index=True)
     phone_number = Column(String(20), nullable=False)
